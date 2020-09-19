@@ -1,0 +1,36 @@
+import random
+import math
+
+def cubeRoot(n):
+  return int(n**(1/3))
+
+def smallestPrimeDivisor(n):
+  # returns the smalles prime divisor less than or equal to < n^(1/3)
+  for i in range(2, cubeRoot(n) + 1):
+    if (n % i == 0):
+      return i
+  return 0;
+
+def isSquareFree(n):
+  # checks whether number is square free
+  if (n == 1):
+    return True
+  if (int(math.sqrt(n))**2 == n):
+    return False
+  spd = smallestPrimeDivisor(n)
+  if (spd == 0):
+    return True
+  if (n % spd**2 == 0):
+    return False
+  return isSquareFree(n/spd)
+
+def sqFreeSeq(n, length):
+  print(n)
+  m = 0
+  for i in range(0, 10):
+    if (isSquareFree(10*n + i)):
+      if (sqFreeSeq(10*n + i, length + 1) > m):
+        m = sqFreeSeq(10*n + i, length + 1)
+  return(m)
+
+print(sqFreeSeq(2, 0))
