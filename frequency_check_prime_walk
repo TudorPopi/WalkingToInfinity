@@ -1,0 +1,83 @@
+import math
+
+def isPrime(n):
+  # checks if n is prime 
+  if n == 1:
+    return False
+  divisor = 2
+  while (divisor*divisor <= n):
+    if (n % divisor == 0):
+      return False
+    divisor += 1
+  return True
+
+def primeBounding(s, maxSet, n):
+  # outputs the largest set of primes that can be obtained by adding a digit to the right given set s, which has a maximal element n
+
+  curr = s.copy()
+  if (isPrime(n*10 + 1)):
+    curr.add(n*10 + 1)
+    if (len(curr) > len(maxSet)):
+      maxSet = curr.copy()
+    s1 = primeBounding(curr, maxSet, n*10 + 1)
+    # the set which is obtained after adding 10n + 1 (if it's prime) to the current set and doing the prime walk again
+    maxSet = s1.copy()
+    curr.remove(n*10 + 1)
+  
+  if (isPrime(n*10 + 3)):
+    curr.add(n*10 + 3)
+    if (len(curr) > len(maxSet)):
+      maxSet = curr.copy()
+    s3 = primeBounding(curr, maxSet, n*10 + 3)
+    # the set which is obtained after adding 10n + 3 (if it's prime) to the current set and doing the prime walk again
+    maxSet = s3.copy()
+    curr.remove(n*10 + 3)
+  
+  if (isPrime(n*10 + 7)):
+    curr.add(n*10 + 7)
+    if (len(curr) > len(maxSet)):
+      maxSet = curr.copy()
+    s7 = primeBounding(curr, maxSet, n*10 + 7)
+    # the set which is obtained after adding 10n + 7 (if it's prime) to the current set and doing the prime walk again
+    maxSet = s7.copy()
+    curr.remove(n*10 + 7)
+  
+  if (isPrime(n*10 + 9)):
+    curr.add(n*10 + 9)
+    if (len(curr) > len(maxSet)):
+      maxSet = curr.copy()
+    s9 = primeBounding(curr, maxSet, n*10 + 9)
+    # the set which is obtained after adding 10n + 9 (if it's prime) to the current set and doing the prime walk again
+    maxSet = s9.copy()
+    curr.remove(n*10 + 9)
+  
+  return maxSet
+
+#s = {11}
+#maxSet = {11}
+#print(primeBounding(s, maxSet, 11))
+
+def digit_check(n):
+#keeps track of the frequency of each digit added
+  i = 100001
+  digitList = [0]*4
+  while(i < n):
+    if (isPrime(i)):
+      s = {i}
+      maxSet = {i}
+      num = max(primeBounding(s, maxSet, i))
+      while (num != i):
+        if (num % 10 == 1):
+          digitList[0] += 1
+        if (num % 10 == 3):
+          digitList[1] += 1
+        if (num % 10 == 7):
+          digitList[2] += 1
+        if (num % 10 == 9):
+          digitList[3] += 1
+        num = num//10
+    print(i)
+    i += 2
+  return digitList
+
+print(digit_check(1000000))
