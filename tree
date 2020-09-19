@@ -1,7 +1,5 @@
 import math
 
-# tree stuff, I wouldn't recommend tweaking unless you have serious ideas for
-# optimizations
 class Tree:
     def __init__(self, value, children):
         self.value = value
