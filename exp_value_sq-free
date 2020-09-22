@@ -1,0 +1,67 @@
+import random
+import math
+
+def cubeRoot(n):
+  return int(n**(1/3))
+
+def smallestPrimeDivisor(n):
+  # returns the smalles prime divisor less than or equal to < n^(1/3)
+  for i in range(2, cubeRoot(n) + 1):
+    if (n % i == 0):
+      return i
+  return 0;
+
+def isSquareFree(n):
+  # checks whether number is square free
+  if (n == 1):
+    return True
+  if (int(math.sqrt(n))**2 == n):
+    return False
+  spd = smallestPrimeDivisor(n)
+  if (spd == 0):
+    return True
+  if (n % spd**2 == 0):
+    return False
+  return isSquareFree(n/spd)
+
+
+def randomRunLength():
+  squareFreeCheck = True
+  digitLst = [0]*10
+  while (squareFreeCheck):
+    val = random.randrange(101, 1000, 2)
+    if (isSquareFree(val) and (val % 5 != 0)):
+      squareFreeCheck = False
+  runLength = 1
+  while (isSquareFree(val)):
+    digitLst[val % 10] += 1
+    runLength += 2
+    digit = random.choice([1, 3, 7, 9])
+    val = val*100 + digit
+  runLength -= 1
+  return (runLength, digitLst)
+
+
+def averageRandomRunLength(trials):
+  valueLST = [0]*100
+  digitLst = [0]*10
+  totalRunLength = 0
+  for trial in range(trials):
+    print(trial)
+    (runLength, dLst) = randomRunLength()
+    for i in range(0, 10):
+      digitLst[i] += dLst[i]
+    totalRunLength += runLength 
+    valueLST[runLength] += 1
+  return (totalRunLength / trials, valueLST, digitLst)
+
+for k in range(4,5):
+  trials = 10**k
+  (avg, valueLst, dlst ) = averageRandomRunLength(trials)
+  print("10**%d trials -->" % k)
+  print("average is", avg)
+  s = 0
+  for j in range(0, 10):
+    s += dlst[j]
+  for i in range(0, 10):
+    print(i, " appears ", dlst[i]/s)
